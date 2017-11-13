@@ -37,7 +37,7 @@ public class Gateway_Rule_2 extends Rule {
             List<String> incomings = gateWay.getIncoming();
             List<String> outgoings = gateWay.getOutgoing();
             //判断是否符合规则的输入
-            if (incomings.size() == 1 && outgoings.size() >= 2) {
+            if ((incomings.size() == 1 && outgoings.size() >= 2)||(incomings.size()>=2 && outgoings.size() == 1)) {
                 String id = gateWay.getId();
                 String name = gateWay.getName();
                 //用来保存该结构的输入id与输出id
