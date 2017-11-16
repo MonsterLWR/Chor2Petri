@@ -34,24 +34,22 @@ public class PreRule5 extends PreRule {
 			}
 			List<Association> associations = bpmn_elements.getAssociationList();
 			int num = 0;
-			Association association1 = null;
-			Association association2 = null;
+			ArrayList<Association> associations1 = new ArrayList<>();
+			ArrayList<Association> associations2 = new ArrayList<>();
+			int num1 = 0, num2 =0;
 			for (int j = 0; j < associations.size(); ++j) {
 				Association association = associations.get(j);
 				if (association.getSourceRef().equals(participantRef1) || association.getTargetRef().equals(participantRef1)) {
-					++num;
+					++num1;
 				} else if (association.getSourceRef().equals(participantRef2)) {
-					++num;
-					association1 = association;
+					++num2;
+					associations1.add(association);
 				} else if (association.getTargetRef().equals(participantRef2)) {
-					++num;
-					association2 = association;
-				}
-				if (num == 2) {
-					break;
+					++num2;
+					associations2.add(association);
 				}
 			}
-			if (num == 2) {
+			if (num1 >= 1 && num2 >= 1) {
 				ChoreographyTask choreographyTask2 = new ChoreographyTask();
 				choreographyTask2.setId(GenID.getId());
 				choreographyTask2.setLoopType("None");
@@ -115,10 +113,14 @@ public class PreRule5 extends PreRule {
 				choreographyTask2.setMessageFlowRef(coming);
 				choreographyTasks.add(choreographyTask2);
 				
-				if (association1 != null) {
-					association1.setSourceRef(participant2.getId());
-				} else {
-					association2.setTargetRef(participant2.getId());
+				if (associations1.size() >= 1) {
+					for (Association association1 : associations1) {
+						association1.setSourceRef(participant2.getId());
+					}
+				} else if (associations2.size() >= 1) {
+					for (Association association2 : associations2) {
+						association2.setTargetRef(participant2.getId());
+					}
 				}
 			}
 		}
