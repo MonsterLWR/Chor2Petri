@@ -20,7 +20,8 @@ public class PreRule4_1 extends PreRule{
 		for(int i = 0; i < choreographyTasks.size(); i++) {
 			ChoreographyTask choreography = choreographyTasks.get(i);
 			
-			if(choreography.getOutgoing().size() >= 2) { //Tasks的输出行数等于2时
+			if(choreography.getOutgoing().size() >= 2) { //Tasks的输出行数大于等于2时
+				int outgoingSize = choreography.getOutgoing().size();
 				//1.创建并行网关
 				ParallelGateway newParallelGateway = new ParallelGateway();
 				  //定义属性
@@ -36,17 +37,25 @@ public class PreRule4_1 extends PreRule{
 				newParallelGateway.setIncoming(newParaIncoming);
 				
 				ArrayList<String> newParaOutgoing = new ArrayList<>();//定义输出
-				newParaOutgoing.add(choreography.getOutgoing().get(0));
-				newParaOutgoing.add(choreography.getOutgoing().get(1));
+				for(int j = 0; j < outgoingSize; j++) {
+					newParaOutgoing.add(choreography.getOutgoing().get(j));
+				}
 				newParallelGateway.setOutgoing(newParaOutgoing);
 				
 				parallelGatewaysList.add(newParallelGateway);
 				bpmn_elements.getGateWayList().add(newParallelGateway);
 				
 				//2.更改序列流
+				boolean mid = false;
 				for(int j = 0; j < sequenceFlowsList.size(); j++) {
-					if(sequenceFlowsList.get(j).getId().equals(choreography.getOutgoing().get(0)) || sequenceFlowsList.get(j).getId().equals(choreography.getOutgoing().get(1))) {
+					for(int a = 0; a < outgoingSize; a++) {
+						if(sequenceFlowsList.get(j).getId().equals(choreography.getOutgoing().get(a))) {
+							mid =true;
+						}
+					}
+					if(mid) {
 						sequenceFlowsList.get(j).setSourceRef(newParID);
+						mid = false;
 					}
 				}
 				

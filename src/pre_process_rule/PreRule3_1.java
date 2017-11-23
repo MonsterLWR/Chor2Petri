@@ -21,7 +21,8 @@ public class PreRule3_1 extends PreRule{
 		for(int i = 0; i < choreographyTasks.size(); i++) {
 			ChoreographyTask choreography = choreographyTasks.get(i);
 			
-			if(choreography.getIncoming().size() >= 2) { //Tasks的输入行数等于2时
+			if(choreography.getIncoming().size() >= 2) { //Tasks的输入行数大于等于2时
+				int incomingSize = choreography.getIncoming().size();
 				//1.生成选择网关
 				ExclusiveGateway newExclusiveGateway = new ExclusiveGateway();
 				//设置属性
@@ -32,8 +33,9 @@ public class PreRule3_1 extends PreRule{
 				newExclusiveGateway.setName("Exclusive Gateway");
 				
 				ArrayList<String> newExclusIncoming = new ArrayList<>();
-				newExclusIncoming.add(choreography.getIncoming().get(0));
-				newExclusIncoming.add(choreography.getIncoming().get(1));
+				for(int j = 0; j < choreography.getIncoming().size();j++) {
+					newExclusIncoming.add(choreography.getIncoming().get(j));
+				}				
 				newExclusiveGateway.setIncoming(newExclusIncoming);
 				
 				String ExclusOutputID = GenID.getId(); //网关输出ID，也是序列流ID
@@ -45,9 +47,16 @@ public class PreRule3_1 extends PreRule{
 				bpmn_elements.getGateWayList().add(newExclusiveGateway);
 				
 				//2.改变之前序列流的targetRef
+				boolean mid = false;
 				for(int j = 0; j < sequenceFlowsList.size(); j++) {
-					if(sequenceFlowsList.get(j).getId().equals(choreography.getIncoming().get(0)) || sequenceFlowsList.get(j).getId().equals(choreography.getIncoming().get(1))) {
+					for(int a = 0; a < incomingSize; a++) {
+						if(sequenceFlowsList.get(j).getId().equals(choreography.getIncoming().get(a))) {
+							mid =true;
+						}
+					}
+					if(mid) {
 						sequenceFlowsList.get(j).setTargetRef(ExclusID);
+						mid = false;
 					}
 				}
 				
