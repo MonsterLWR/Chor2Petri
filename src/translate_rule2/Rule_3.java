@@ -1,7 +1,7 @@
 package translate_rule2;
 
 import bpmnElement.BPMN_elements;
-import bpmnElement.ChoreographyTask;
+import bpmnElement.IntermediateThrowEvent;
 import bpmnElement.SequenceFlow;
 import petriElement.Arc;
 import petriElement.Petri_elements;
@@ -10,18 +10,15 @@ import petriElement.Transition;
 
 import java.util.List;
 
-/**
- * Created by 李炆睿 on 2017/11/23.
- */
-public class Rule_4 extends Rule {
+public class Rule_3 extends Rule {
+
     @Override
     public void excecute(BPMN_elements bpmn_elements, Petri_elements petri_elements) {
-        List<ChoreographyTask> choreographyTasks = bpmn_elements.getChoreographyTaskList();
-        for (ChoreographyTask choreographyTask : choreographyTasks) {
-            String id = choreographyTask.getId();
-            String name = choreographyTask.getName();
+        List<IntermediateThrowEvent> intermediateThrowEvents = bpmn_elements.getIntermediateThrowEventList();
+        for (IntermediateThrowEvent intermediateThrowEvent : intermediateThrowEvents) {
+            String id = intermediateThrowEvent.getId();
+            String name = intermediateThrowEvent.getName();
 
-            //            根据id将choreographyTask转为对应的petri对象
             petri_elements.getTransition_list().add(new Transition(id + "_t", name + "_t"));
 
             List<SequenceFlow> froms = RuleHelper.getFromSequence(bpmn_elements.getSequenceFlowList(), id);
@@ -44,4 +41,5 @@ public class Rule_4 extends Rule {
 
         }
     }
+
 }

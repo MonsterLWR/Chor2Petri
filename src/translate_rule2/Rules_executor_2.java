@@ -16,6 +16,10 @@ public class Rules_executor_2 {
         //gateway_rule需要在basic_rule之前执行，因为gateway_rule中涉及到对bpmn对象的删减
         rules.add(new Rule_4());
         rules.add(new Rule_5_6());
+        rules.add(new Rule_3());
+        rules.add(new Rule_7_8());
+        rules.add(new Rule_1());
+        rules.add(new Rule_2());
     }
 
     public void excecute(BPMN_elements bpmn_elements, Petri_elements petri_elements) {

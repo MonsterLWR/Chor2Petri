@@ -54,10 +54,17 @@ public class Test_for_translate {
     }
 
     @Test
-    public void test_translate_rules2() throws DocumentException {
+    public void test_translate_rules2() throws DocumentException, IOException {
         BPMN_reader reader = new BPMN_reader();
         BPMN_elements bpmn_elements = reader.read_bpmn("case.bpmn");
         Petri_elements petri_elements = new Petri_elements();
+
+        //预处理
+        PreRules_excecutor preRules_excecutor = new PreRules_excecutor();
+        preRules_excecutor.excecute(bpmn_elements);
+        //生成预处理后的bpmn
+        BPMN_writer bpmn_writer = new BPMN_writer(bpmn_elements);
+        bpmn_writer.write("BPMN.bpmn");
 
         Rules_executor_2 rulesExecutor2 = new Rules_executor_2();
         rulesExecutor2.excecute(bpmn_elements, petri_elements);
